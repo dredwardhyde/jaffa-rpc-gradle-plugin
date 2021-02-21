@@ -8,22 +8,37 @@
 
 plugins {
     // Apply the Java Gradle plugin development plugin to add support for developing Gradle plugins
-    `java-gradle-plugin`
+    id("java-gradle-plugin")
+    id("maven-publish")
+    id("com.gradle.plugin-publish") version "0.12.0"
 }
 
 repositories {
     // Use JCenter for resolving dependencies.
     jcenter()
+    mavenCentral()
 }
 
 dependencies {
     implementation("com.github.javaparser:javaparser-symbol-solver-core:3.18.0")
 }
 
+pluginBundle {
+    website = "https://github.com/dredwardhyde/jaffa-rpc-gradle-plugin"
+    vcsUrl = "https://github.com/dredwardhyde/jaffa-rpc-gradle-plugin.git"
+    tags = listOf("jaffa", "rpc", "jaffa-rpc-gradle-plugin")
+}
+
+group = "com.github.dredwardhyde"
+version = "1.1"
+
 gradlePlugin {
-    // Define the plugin
-    val greeting by plugins.creating {
-        id = "jaffa-rpc-plugin"
-        implementationClass = "com.jaffa.rpc.gradle.plugin.JaffaRpcGradlePluginPlugin"
+    plugins {
+        create("greetingsPlugin") {
+            id = "com.jaffa.rpc.gradle.plugin"
+            displayName = "Jaffa RPC Gradle Plugin"
+            description = "Gradle Plugin For Jaffa RPC Library"
+            implementationClass = "com.jaffa.rpc.gradle.plugin.JaffaRpcGradlePluginPlugin"
+        }
     }
 }
